@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af7181f404f1447c0a7a17b3070b952b, type: 3}
-  m_Name: arm_texture
+  m_Name: arm_texture long
   m_EditorClassIdentifier: 
   m_Angles:
   - m_Start: -45
     m_End: 45
     m_Order: 4
     m_Sprites:
-    - {fileID: 21300000, guid: 1a4ea3e9cc074444fb60669234732877, type: 3}
+    - {fileID: 21300000, guid: cfae55db71d08e84eb5ae2798c7f44be, type: 3}
   - m_Start: 45
     m_End: 135
     m_Order: 3
     m_Sprites:
-    - {fileID: 21300000, guid: 1a4ea3e9cc074444fb60669234732877, type: 3}
+    - {fileID: 21300000, guid: cfae55db71d08e84eb5ae2798c7f44be, type: 3}
   - m_Start: -225
     m_End: -135
     m_Order: 2
     m_Sprites:
-    - {fileID: 21300000, guid: 1a4ea3e9cc074444fb60669234732877, type: 3}
+    - {fileID: 21300000, guid: cfae55db71d08e84eb5ae2798c7f44be, type: 3}
   - m_Start: -135
     m_End: -45
     m_Order: 1
     m_Sprites:
-    - {fileID: 21300000, guid: 1a4ea3e9cc074444fb60669234732877, type: 3}
+    - {fileID: 21300000, guid: cfae55db71d08e84eb5ae2798c7f44be, type: 3}
   m_FillTexture: {fileID: 0}
   m_CornerSprites:
   - m_CornerType: 0
