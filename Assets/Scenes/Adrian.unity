@@ -730,6 +730,7 @@ GameObject:
   - component: {fileID: 1393774552}
   - component: {fileID: 1393774551}
   - component: {fileID: 1393774550}
+  - component: {fileID: 1393774553}
   m_Layer: 0
   m_Name: player_arm
   m_TagString: Untagged
@@ -770,8 +771,8 @@ MonoBehaviour:
       bevelSize: 0
       spriteIndex: 0
       corner: 1
-    - position: {x: -2.4879372, y: 2.8835258, z: 0}
-      leftTangent: {x: -0.009115458, y: 1.0231242, z: 0}
+    - position: {x: -2.5561252, y: 2.747149, z: 0}
+      leftTangent: {x: -0.009115458, y: 1.0231245, z: 0}
       rightTangent: {x: 0, y: 0, z: 0}
       mode: 2
       height: 1
@@ -867,6 +868,22 @@ Transform:
   m_Father: {fileID: 1070750051}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!123 &1393774553
+LensFlare:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393774549}
+  m_Enabled: 1
+  m_Flare: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Brightness: 1
+  m_FadeSpeed: 3
+  m_IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 6
+  m_Directional: 0
 --- !u!1 &1531240772
 GameObject:
   m_ObjectHideFlags: 0
