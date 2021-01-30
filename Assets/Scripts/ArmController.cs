@@ -57,6 +57,23 @@ public class ArmController : MonoBehaviour
 			setHandPos(spline, newDirection, lastDir);
 			lastDir = newDirection;
 		}
+
+		// Update the hand sprite to follow the tip of the newly moved hand
+		handSprite.transform.position = modifyZ(spline.GetPosition(spline.GetPointCount() - 1), -1.5f);
+
+		float angle = 0;
+
+		switch (lastDir)
+		{
+			case Direction.Down: angle = 270; break;
+			case Direction.Left: angle = 180; break;
+			case Direction.Up: angle = 90; break;
+			case Direction.Right: angle = 0; break;
+		}
+
+		print("last dir is " + lastDir + " Angle is now " + angle + " quat is " + Quaternion.Euler(0, 0, angle));
+		handSprite.transform.rotation = Quaternion.Euler(0, 0, angle);
+
 	}
 
 
@@ -117,9 +134,6 @@ public class ArmController : MonoBehaviour
 			spline.SetRightTangent(last, tangents[1]);
 
 			//print("Left " + tangents[0] + " Right " + tangents[1]);
-			print("Left " + spline.GetLeftTangent(2) + " " + spline.GetRightTangent(2));
-
-			//spline.setR
 		}
 
 	}
@@ -195,6 +209,11 @@ public class ArmController : MonoBehaviour
 		return new Vector3[2] { left, right };
 	} 
 
+
+	private Vector3 modifyZ(Vector3 vec, float z)
+    {
+		return new Vector3(vec.x, vec.y, z);
+	}
 
 
 	private void makeNewkeyPoint(Spline spline, Vector3 keypoint)
