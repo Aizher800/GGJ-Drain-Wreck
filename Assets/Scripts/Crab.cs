@@ -16,4 +16,13 @@ public class Crab : MonoBehaviour
     {
         
     }
+    /*have different states
+
+    // move state (maybe a coroutine):
+    loops through an array moving towards one point each frame until it reaches point 
+    then starts moving towards the other
+
+    // hold state: triggered when an blocker moves around the crab. stops the move state coroutine
+    */
+
 }
