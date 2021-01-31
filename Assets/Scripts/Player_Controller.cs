@@ -32,6 +32,9 @@ public class Player_Controller : MonoBehaviour
 	public GameObject playerArm;
 	public GameObject playerHand;
 
+	public Vector3 pipesOffset;
+	public Vector3 handOffset;
+
 	private List<Vector3> possibleMoves;
 	private List<Move> moves;
 
@@ -49,11 +52,10 @@ public class Player_Controller : MonoBehaviour
 		// get the possible moves
 		possibleMoves = new List<Vector3>();
 		GameObject[] pipes = GameObject.FindGameObjectsWithTag("PipeLocation");
-		Vector3 offset = new Vector3(-1, 0, 0);
 		foreach (GameObject o in pipes)
         {
 			print(Round(ModifyZ(o.transform.position, 0f)));
-			possibleMoves.Add(Round(ModifyZ(o.transform.position, 0f)) + offset);
+			possibleMoves.Add(Round(ModifyZ(o.transform.position, 0f)) + pipesOffset);
         }
 
 		// get the controller and then the spline object for the arm
@@ -95,7 +97,7 @@ public class Player_Controller : MonoBehaviour
 
 			// Update the hand sprite to follow the tip of the newly moved hand
 			Vector3 offset = new Vector3(1, 0, 0);
-			Vector3 handPos = ModifyZ(spline.GetPosition(spline.GetPointCount() - 1), -1.0f) + GetDirectionalStep(lastDir) * 0.00f + offset;
+			Vector3 handPos = ModifyZ(spline.GetPosition(spline.GetPointCount() - 1), -1.0f) + GetDirectionalStep(lastDir) * 0.00f + handOffset;
 			playerHand.transform.position = handPos;
 
 			float angle = 0;
