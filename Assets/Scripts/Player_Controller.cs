@@ -162,17 +162,30 @@ public class Player_Controller : MonoBehaviour
 		// Build the corners as you go 
 		for (int i = 1; i < moves.Count; i++) 
 		{
-			if (moves[i].GetDirection() != moves[i-1].GetDirection())
+			Direction lastD = moves[i - 1].GetDirection();
+			Direction nextD = moves[i].GetDirection();
+
+			if (lastD != nextD)
             {
-				print("Inserting at (" + (spline.GetPointCount()) + ") " + moves[i - 1].GetLocation());
-				spline.InsertPointAt(spline.GetPointCount(), moves[i-1].GetLocation()); // insert a point behind where we just were
-				//spline.SetTangentMode(n, ShapeTangentMode.Continuous); // set it curvey
+				int insertId = spline.GetPointCount();
+				spline.InsertPointAt(insertId, moves[i-1].GetLocation()); // insert a point behind where we just were
+				spline.SetTangentMode(insertId, ShapeTangentMode.Continuous); // set it curvey
+
+				Vector3[] tangents = GetSmoothCorners(nextD, lastD);
+				spline.SetLeftTangent(insertId, tangents[0]);
+				spline.SetRightTangent(insertId, tangents[1]);
+
 			}
         }
 
-		spline.InsertPointAt(spline.GetPointCount(),
-			moves[moves.Count - 1].GetLocation() + GetDirectionalStep(moves[moves.Count - 1].GetDirection()));
+		int nubId = spline.GetPointCount();
+		Direction nubDir = moves[moves.Count - 1].GetDirection();
+		spline.InsertPointAt(nubId,
+			moves[moves.Count - 1].GetLocation() + GetDirectionalStep(nubDir));
 
+		// Set the 'nub' end of the hand to be perpendicular to the way of travel (for hand)
+		spline.SetTangentMode(nubId, ShapeTangentMode.Continuous);
+		spline.SetLeftTangent(nubId, -GetDirectionalStep(nubDir));
 
 		/*
 			if (newDir == lastDir)
