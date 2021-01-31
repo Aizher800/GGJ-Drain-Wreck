@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/devScene_erin_menuUI.unity
     guid: f364e053c2218934e8fa0ea0fd895392
   - enabled: 1
+    path: Assets/Scenes/LevelBlockOut.unity
+    guid: 014a9e355e619d548adbdcc7f9026b4b
+  - enabled: 0
     path: Assets/Scenes/devScene_erin_audio.unity
     guid: 8d198869b8164984cb262166b44b7634
   m_configObjects: {}
