@@ -37336,7 +37336,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666486497}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.18, y: 0.01, z: -19.43}
+  m_LocalPosition: {x: 1.18, y: 6, z: -21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -38518,6 +38518,16 @@ PrefabInstance:
         type: 3}
       propertyPath: handOffset.x
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3600720571912285713, guid: b2aed4c434d6d1547a0631dba9d67d14,
+        type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 1666486497}
+    - target: {fileID: 3600720571912285713, guid: b2aed4c434d6d1547a0631dba9d67d14,
+        type: 3}
+      propertyPath: armInitialPoints
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3600720571912285714, guid: b2aed4c434d6d1547a0631dba9d67d14,
         type: 3}
