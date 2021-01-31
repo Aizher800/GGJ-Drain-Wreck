@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyScript : MonoBehaviour
+public class enemyScript : MonoBehaviour
 {
     const string LEFT = "left"; //stops typos and from us writing it over and over
     const string RIGHT = "right";
