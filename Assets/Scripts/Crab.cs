@@ -12,10 +12,12 @@ public class Crab : MonoBehaviour
     public Transform blockcheckPointLeft;
     public bool isBlocked = false;
 
+    private bool endreached = false;
+
     private Vector3 _v; //is just used for checking whether the crab is going left or right
     private Vector3 _old;
 
-    public Animator anim;
+    //public Animator anim;
 
     private float journeyLength; // is used for the lerp in the moving coroutine
     // Start is called before the first frame update
@@ -28,7 +30,9 @@ public class Crab : MonoBehaviour
         }
         StartCoroutine(MovePoint());
         _old = transform.position;
-        anim  = gameObject.GetComponent<Animator>();
+        blockcheckPoint = blockcheckPointLeft;
+       //StartCoroutine(BlockCheck());
+        //anim  = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -62,7 +66,7 @@ public class Crab : MonoBehaviour
                 float fractionOfJourney = 0f;
                 while(fractionOfJourney < 1f)
                 {
-                    anim.SetBool("crabWalk", true);
+                    //anim.SetBool("crabWalk", true);
                     while(isBlocked)
                     {
                         yield return new WaitForFixedUpdate();
@@ -74,15 +78,19 @@ public class Crab : MonoBehaviour
                     //rb2d.MovePosition(Vector3.Lerp(startPosition, target, fractionOfJourney));
                     yield return new WaitForFixedUpdate(); // waits until the next fixed update
                 }
-                StartCoroutine(MovePoint());
+                //StartCoroutine(MovePoint());
+                //end reached
+
            }
             // ^^stuff here that moves towards it probably a lerp
 
             
-
+        
         }
+        StartCoroutine(MovePoint());
     }
-    IEnumerator BlockCheck() // checks if there is a block in the trigger
+}
+    /*IEnumerator BlockCheck() // checks if there is a block in the trigger
     {
         while(true)
         {
@@ -92,16 +100,22 @@ public class Crab : MonoBehaviour
             {
                 if (block.CompareTag("grabbable"))
                 {
+                    Debug.Log("Dumb F'ing Crab");
                     isBlocked = true;
-                    anim.SetTrigger("crabWait");
-                    anim.SetBool("crabWalk",false);
                 }
             }
+            yield return new WaitForFixedUpdate();
         }
-    } 
-    
+    } */
+    /*void OnTriggerExit2D (Collider2D other)
+    {
+        if(gameObject.CompareTag("grabbable"))
+        {
+            isBlocked= false;
+        }
+    } */
 
-}
+
 /*have different states  Just PLANNING TRASH
 
     // move state (maybe a coroutine):
