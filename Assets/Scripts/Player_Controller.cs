@@ -49,9 +49,11 @@ public class Player_Controller : MonoBehaviour
 		// get the possible moves
 		possibleMoves = new List<Vector3>();
 		GameObject[] pipes = GameObject.FindGameObjectsWithTag("PipeLocation");
+		Vector3 offset = new Vector3(-1, 0, 0);
 		foreach (GameObject o in pipes)
         {
-			possibleMoves.Add(o.transform.position);
+			print(Round(ModifyZ(o.transform.position, 0f)));
+			possibleMoves.Add(Round(ModifyZ(o.transform.position, 0f)) + offset);
         }
 
 		// get the controller and then the spline object for the arm
@@ -92,7 +94,8 @@ public class Player_Controller : MonoBehaviour
 			Direction lastDir = GetLastDirection();
 
 			// Update the hand sprite to follow the tip of the newly moved hand
-			Vector3 handPos = ModifyZ(spline.GetPosition(spline.GetPointCount() - 1), -1.5f) + GetDirectionalStep(lastDir) * 0.00f;
+			Vector3 offset = new Vector3(1, 0, 0);
+			Vector3 handPos = ModifyZ(spline.GetPosition(spline.GetPointCount() - 1), -1.0f) + GetDirectionalStep(lastDir) * 0.00f + offset;
 			playerHand.transform.position = handPos;
 
 			float angle = 0;
@@ -178,6 +181,8 @@ public class Player_Controller : MonoBehaviour
 					spline.SetLeftTangent(insertId, tangents[0]);
 					spline.SetRightTangent(insertId, tangents[1]);
 
+					spline.SetHeight(insertId, 0.5f);
+
 				}
 			}
 
@@ -189,6 +194,11 @@ public class Player_Controller : MonoBehaviour
 			// Set the 'nub' end of the hand to be perpendicular to the way of travel (for hand)
 			spline.SetTangentMode(nubId, ShapeTangentMode.Continuous);
 			spline.SetLeftTangent(nubId, -GetDirectionalStep(nubDir));
+			spline.SetHeight(nubId, 0.5f);
+		} 
+		else
+        {
+			print("Move failed to " + nextPos);
         }
 	}
 
@@ -266,6 +276,12 @@ public class Player_Controller : MonoBehaviour
 		}
 
 		return new Vector3[2] { left, right };
+	}
+
+	private Vector3 Round(Vector3 vec)
+    {
+		return new Vector3(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y), Mathf.RoundToInt(vec.z));
+
 	}
 
 	private Vector3 ModifyZ(Vector3 vec, float z)
