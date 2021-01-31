@@ -35,10 +35,11 @@ public class grabbableScript : MonoBehaviour
             else if(!Physics2D.OverlapPoint(holdpoint.position, notgrabbed)) //stops you from dropping objects in the terrain/garbbing the terrain
             {//throw
                 grabbed=false;
-                
+                Debug.Log("object released");
                 if(hit.collider.gameObject.GetComponent<Rigidbody2D>()!=null)
                 {//angle of throw. faces same direction as play + up.
                     hit.collider.gameObject.GetComponent<Rigidbody2D>().velocity=new Vector2(transform.localScale.x,1)*throwforce;
+                    
                 }
             }
 
