@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PipeLocation
   - grabbable
+  - Key
   layers:
   - Default
   - TransparentFX

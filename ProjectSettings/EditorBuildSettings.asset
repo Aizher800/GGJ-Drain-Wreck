@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelBlockOut.unity
     guid: 014a9e355e619d548adbdcc7f9026b4b
+  - enabled: 1
+    path: Assets/Scenes/WinScene.unity
+    guid: 208f1a262b7b08d4f98dfb7a779103e5
   - enabled: 0
     path: Assets/Scenes/devScene_erin_audio.unity
     guid: 8d198869b8164984cb262166b44b7634
