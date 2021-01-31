@@ -131,7 +131,7 @@ public class Player_Controller : MonoBehaviour
 		if (camera != null)
 		{
 			cameraPos = new Vector3(cameraPos.x, cameraPos.y, camera.transform.position.z);
-			camera.transform.position = Vector3.Lerp(camera.transform.position, cameraPos, 0.05f);
+			camera.transform.position = Vector3.Lerp(camera.transform.position, cameraPos, 0.02f);
 		}
 	}
 
