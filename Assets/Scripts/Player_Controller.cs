@@ -32,6 +32,7 @@ public class Player_Controller : MonoBehaviour
 	public GameObject playerArm;
 	public GameObject playerHand;
 
+	private List<Vector3> possibleMoves;
 	private List<Move> moves;
 
 	private Spline spline;
@@ -44,6 +45,14 @@ public class Player_Controller : MonoBehaviour
 		moves = new List<Move>();
 		print("Move added: " + new Vector3(0, 0, 0));
 		moves.Add(new Move(Direction.Down, new Vector3(0, 0, 0)));
+
+		// get the possible moves
+		possibleMoves = new List<Vector3>();
+		GameObject[] pipes = GameObject.FindGameObjectsWithTag("PipeLocation");
+		foreach (GameObject o in pipes)
+        {
+			possibleMoves.Add(o.transform.position);
+        }
 
 		// get the controller and then the spline object for the arm
 		SpriteShapeController ssc = playerArm.GetComponent<SpriteShapeController>();
@@ -83,7 +92,7 @@ public class Player_Controller : MonoBehaviour
 			Direction lastDir = GetLastDirection();
 
 			// Update the hand sprite to follow the tip of the newly moved hand
-			Vector3 handPos = ModifyZ(spline.GetPosition(spline.GetPointCount() - 1), -1.5f) + GetDirectionalStep(lastDir) * 0.75f;
+			Vector3 handPos = ModifyZ(spline.GetPosition(spline.GetPointCount() - 1), -1.5f) + GetDirectionalStep(lastDir) * 0.00f;
 			playerHand.transform.position = handPos;
 
 			float angle = 0;
@@ -131,125 +140,62 @@ public class Player_Controller : MonoBehaviour
 		Vector3 curPos = moves[moves.Count - 1].GetLocation();
 		Vector3 nextPos = curPos + GetDirectionalStep(newDir);
 
-		if (newDir == GetOppositeDirection(lastDir))
+		if (isValidMove(nextPos))
         {
-			// use this move to nuke out another
-			moves.RemoveAt(moves.Count - 1);
-			//moves.RemoveAt(moves.Count - 1);
-        } 
-		else
-        {
-			// Place a new move
-			moves.Add(new Move(newDir, nextPos));
-		}
-
-		// Clear all spline apart from first n
-		int n = 1;
-		for (int i = spline.GetPointCount() - 1; i > n; i--) {
-			spline.RemovePointAt(i);
-		}
-		//spline.Clear();
-
-		// Set the floating head point 
-		//spline.InsertPointAt(spline.GetPointCount(), new Vector3(4, 4, 0));;
-			//moves[moves.Count - 1].GetLocation() + GetDirectionalStep(moves[moves.Count - 1].GetDirection()));
-
-		//spline.InsertPointAt(spline.GetPointCount(), new Vector3(1, 1, 0));
-		//spline.InsertPointAt(spline.GetPointCount(), new Vector3(6, 6, 0));
-
-		print("There are " + moves.Count + " moves in queue");
-
-		// Build the corners as you go 
-		for (int i = 1; i < moves.Count; i++) 
-		{
-			Direction lastD = moves[i - 1].GetDirection();
-			Direction nextD = moves[i].GetDirection();
-
-			if (lastD != nextD)
-            {
-				int insertId = spline.GetPointCount();
-				spline.InsertPointAt(insertId, moves[i-1].GetLocation()); // insert a point behind where we just were
-				spline.SetTangentMode(insertId, ShapeTangentMode.Continuous); // set it curvey
-
-				Vector3[] tangents = GetSmoothCorners(nextD, lastD);
-				spline.SetLeftTangent(insertId, tangents[0]);
-				spline.SetRightTangent(insertId, tangents[1]);
-
+			if (newDir == GetOppositeDirection(lastDir))
+			{
+				// use this move to nuke out another
+				moves.RemoveAt(moves.Count - 1);
+				//moves.RemoveAt(moves.Count - 1);
+			} 
+			else
+			{
+				// Place a new move
+				moves.Add(new Move(newDir, nextPos));
 			}
-        }
 
-		int nubId = spline.GetPointCount();
-		Direction nubDir = moves[moves.Count - 1].GetDirection();
-		spline.InsertPointAt(nubId,
-			moves[moves.Count - 1].GetLocation() + GetDirectionalStep(nubDir));
+			// Clear all spline apart from first n
+			int n = 1;
+			for (int i = spline.GetPointCount() - 1; i > n; i--) {
+				spline.RemovePointAt(i);
+			}
 
-		// Set the 'nub' end of the hand to be perpendicular to the way of travel (for hand)
-		spline.SetTangentMode(nubId, ShapeTangentMode.Continuous);
-		spline.SetLeftTangent(nubId, -GetDirectionalStep(nubDir));
+			print("There are " + moves.Count + " moves in queue");
 
-		/*
-			if (newDir == lastDir)
-		{
-			// moving in the SAME DIRECTION 
-			spline.SetPosition(headPoint, nextPos);
+			// Build the corners as you go 
+			for (int i = 1; i < moves.Count; i++) 
+			{
+				Direction lastD = moves[i - 1].GetDirection();
+				Direction nextD = moves[i].GetDirection();
 
-			print("Move added: " + nextPos);
-			
-		}
-		else if (newDir == GetOppositeDirection(lastDir))
-        {
-			// We are BACKTRACKING:
+				if (lastD != nextD)
+				{
+					int insertId = spline.GetPointCount();
+					spline.InsertPointAt(insertId, moves[i-1].GetLocation()); // insert a point behind where we just were
+					spline.SetTangentMode(insertId, ShapeTangentMode.Continuous); // set it curvey
 
-			int lastMoveId = moves.Count - 1;
-			int lastLastMoveId = moves.Count - 2;
+					Vector3[] tangents = GetSmoothCorners(nextD, lastD);
+					spline.SetLeftTangent(insertId, tangents[0]);
+					spline.SetRightTangent(insertId, tangents[1]);
 
-			Direction lastMove = moves[lastMoveId].GetDirection();
-			Direction lastLastMove = moves[lastLastMoveId].GetDirection();
+				}
+			}
 
-			if (lastLastMove != lastMove)
-            {
-				// Remove a keypoint since it was made. KP id smame as 2nd last point 
-				spline.RemovePointAt(spline.GetPointCount() - 2);
-            }
-
-			print("Move removed: " + moves[lastMoveId].GetLocation());
-			moves.RemoveAt(lastMoveId);
-			print("Move removed: " + moves[lastLastMoveId].GetLocation());
-			moves.RemoveAt(lastLastMoveId);
-
-			SetHandPos(spline, lastLastMove);
-
-			
-
-			// SetHandPos(spline, moves[lastMoveId].GetDirection());
-
-			// do nothing for now 
-
-			// remove  the last from the stack, and see if the one before that has the same direction or not
-
-			// ensure that we always cant go too far
-
-		}
-		else
-		{
-			// If the direction has changed from the last, add a new keypoint 
-			spline.SetPosition(headPoint, nextPos); // move the head
-			spline.InsertPointAt(headPoint, lastPos); // insert a point behind where we just were
-			spline.SetTangentMode(headPoint, ShapeTangentMode.Continuous); // set it curvey
-
-			print("Move added: " + nextPos);
-			moves.Add(new Move(newDir, nextPos));
-
-			Vector3[] tangents = GetSmoothCorners(newDir, lastDir);
-			spline.SetLeftTangent(headPoint, tangents[0]);
-			spline.SetRightTangent(headPoint, tangents[1]);
+			int nubId = spline.GetPointCount();
+			Direction nubDir = moves[moves.Count - 1].GetDirection();
+			spline.InsertPointAt(nubId,
+				moves[moves.Count - 1].GetLocation() + GetDirectionalStep(nubDir));
 
 			// Set the 'nub' end of the hand to be perpendicular to the way of travel (for hand)
-			spline.SetTangentMode(headPoint + 1, ShapeTangentMode.Continuous);
-			spline.SetLeftTangent(headPoint + 1, -GetDirectionalStep(newDir));
-		}*/
-
+			spline.SetTangentMode(nubId, ShapeTangentMode.Continuous);
+			spline.SetLeftTangent(nubId, -GetDirectionalStep(nubDir));
+        }
 	}
+
+	private bool isValidMove(Vector3 move)
+    {
+		return possibleMoves.Contains(ModifyZ(move, 0));
+    }
 
 	private Vector3 GetDirectionalStep(Direction dir)
 	{
