@@ -31,9 +31,14 @@ public class Player_Controller : MonoBehaviour
 
 	public GameObject playerArm;
 	public GameObject playerHand;
+	public GameObject camera;
 
 	public Vector3 pipesOffset;
 	public Vector3 handOffset;
+
+	public int armInitialPoints = 2;
+
+	private Vector3 cameraPos;
 
 	private List<Vector3> possibleMoves;
 	private List<Move> moves;
@@ -46,7 +51,6 @@ public class Player_Controller : MonoBehaviour
 	{
 
 		moves = new List<Move>();
-		print("Move added: " + new Vector3(0, 0, 0));
 		moves.Add(new Move(Direction.Down, new Vector3(0, 0, 0)));
 
 		// get the possible moves
@@ -90,6 +94,12 @@ public class Player_Controller : MonoBehaviour
 			newDirection = Direction.Up;
 		}
 
+		if (Input.GetKeyDown(KeyCode.R))
+        {
+			ResetHand();
+			newDirection = Direction.Down;
+        }
+
 		if (newDirection != Direction.None)
 		{
 			SetHandPos(spline, newDirection);
@@ -99,6 +109,11 @@ public class Player_Controller : MonoBehaviour
 			Vector3 offset = new Vector3(1, 0, 0);
 			Vector3 handPos = ModifyZ(spline.GetPosition(spline.GetPointCount() - 1), -1.0f) + GetDirectionalStep(lastDir) * 0.00f + handOffset;
 			playerHand.transform.position = handPos;
+
+			if (camera != null)
+            {
+				cameraPos = handPos;
+            }
 
 			float angle = 0;
 
@@ -111,6 +126,12 @@ public class Player_Controller : MonoBehaviour
 			}
 
 			playerHand.transform.rotation = Quaternion.Euler(0, 0, angle);
+		}
+
+		if (camera != null)
+		{
+			cameraPos = new Vector3(cameraPos.x, cameraPos.y, camera.transform.position.z);
+			camera.transform.position = Vector3.Lerp(camera.transform.position, cameraPos, 0.2f);
 		}
 	}
 
@@ -160,10 +181,7 @@ public class Player_Controller : MonoBehaviour
 			}
 
 			// Clear all spline apart from first n
-			int n = 1;
-			for (int i = spline.GetPointCount() - 1; i > n; i--) {
-				spline.RemovePointAt(i);
-			}
+			ClearSpline(spline);
 
 			print("There are " + moves.Count + " moves in queue");
 
@@ -202,6 +220,23 @@ public class Player_Controller : MonoBehaviour
         {
 			print("Move failed to " + nextPos);
         }
+	}
+
+	private void ResetHand()
+    {
+		ClearSpline(spline);
+		moves = new List<Move>();
+		moves.Add(new Move(Direction.Down, new Vector3(0, 0, 0)));
+		SetHandPos(spline, Direction.Down);
+	}
+
+	private void ClearSpline(Spline spline)
+    {
+		int n = armInitialPoints - 1;
+		for (int i = spline.GetPointCount() - 1; i > n; i--)
+		{
+			spline.RemovePointAt(i);
+		}
 	}
 
 	private bool isValidMove(Vector3 move)
