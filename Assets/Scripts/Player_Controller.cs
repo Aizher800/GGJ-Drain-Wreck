@@ -140,34 +140,39 @@ public class Player_Controller : MonoBehaviour
 		else
         {
 			// Place a new move
-			moves.Add(new Move(newDir, curPos));
+			moves.Add(new Move(newDir, nextPos));
 		}
 
 		// Clear all spline apart from first n
-		//int n = 0;
-		for (int i = spline.GetPointCount() - 1; i > 0; i--) {
+		int n = 1;
+		for (int i = spline.GetPointCount() - 1; i > n; i--) {
 			spline.RemovePointAt(i);
 		}
 		//spline.Clear();
 
 		// Set the floating head point 
-		spline.InsertPointAt(0,
-			moves[moves.Count - 1].GetLocation() + GetDirectionalStep(moves[moves.Count - 1].GetDirection()));
+		//spline.InsertPointAt(spline.GetPointCount(), new Vector3(4, 4, 0));;
+			//moves[moves.Count - 1].GetLocation() + GetDirectionalStep(moves[moves.Count - 1].GetDirection()));
 
-		spline.InsertPointAt(0, new Vector3(1, 1, 0));
+		//spline.InsertPointAt(spline.GetPointCount(), new Vector3(1, 1, 0));
+		//spline.InsertPointAt(spline.GetPointCount(), new Vector3(6, 6, 0));
 
 		print("There are " + moves.Count + " moves in queue");
 
-		/*
 		// Build the corners as you go 
-		for (int i = moves.Count - 1; i > 0; i--) 
+		for (int i = 1; i < moves.Count; i++) 
 		{
 			if (moves[i].GetDirection() != moves[i-1].GetDirection())
             {
-				spline.InsertPointAt(i, moves[i].GetLocation()); // insert a point behind where we just were
+				print("Inserting at (" + (spline.GetPointCount()) + ") " + moves[i - 1].GetLocation());
+				spline.InsertPointAt(spline.GetPointCount(), moves[i-1].GetLocation()); // insert a point behind where we just were
 				//spline.SetTangentMode(n, ShapeTangentMode.Continuous); // set it curvey
 			}
-        }*/
+        }
+
+		spline.InsertPointAt(spline.GetPointCount(),
+			moves[moves.Count - 1].GetLocation() + GetDirectionalStep(moves[moves.Count - 1].GetDirection()));
+
 
 		/*
 			if (newDir == lastDir)
