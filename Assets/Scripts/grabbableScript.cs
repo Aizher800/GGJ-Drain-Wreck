@@ -24,7 +24,20 @@ public class grabbableScript : MonoBehaviour
             {//grab
                 Physics2D.queriesStartInColliders=false;
 
-                hit = Physics2D.Raycast(transform.position, Vector2.right*transform.localScale.x, distance);
+                Vector2 dir = new Vector2(1, 0);
+                Vector3 angle = transform.rotation.eulerAngles;
+
+                print("euler angles " + angle);
+
+                if (Mathf.RoundToInt(angle.z) == 0) { dir = new Vector2(1, 0);  }
+                else if (Mathf.RoundToInt(angle.z) == -90) { dir = new Vector2(0, -1); }
+                else if (Mathf.RoundToInt(angle.z) == -180) { dir = new Vector2(-1, 0); }
+                else if (Mathf.RoundToInt(angle.z) == -270) { dir = new Vector2(0, 1); }
+
+                Vector2 back = -distance * 0.5f * dir;
+                Vector3 backOffset = new Vector3(back.x, back.y, 0);
+
+                hit = Physics2D.Raycast(transform.position, dir*transform.localScale.x, distance);
                 
                 if(hit.collider!=null && hit.collider.tag=="grabbable")
                 {
